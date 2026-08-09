@@ -6,3 +6,5 @@ test duplicte
 new 
 # Project12-Refactoring-Static-Assignments
 >>>>>>> 15727abaa474df6cfa339b2d92ecbb4ed4589c25
+>>>>>>>
+>>>>>>> test
