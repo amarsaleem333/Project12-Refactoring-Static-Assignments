@@ -4,7 +4,9 @@ Project 12: Ansible Refactoring & Static Assignments
 1. Configure Jenkins Save Artifacts Job
 
    1-Log into your Jenkins-Ansible control server terminal and create the artifacts directory:
+
       sudo mkdir -p /home/ubuntu/ansible-config-artifact
+
       sudo chmod -R 0777 /home/ubuntu/ansible-config-artifact
    
    2- Open the Jenkins Web Console, navigate to Manage Jenkins $\rightarrow$ Plugins, search for Copy Artifact, and install it without restarting Jenkins.
@@ -31,15 +33,21 @@ Project 12: Ansible Refactoring & Static Assignments
 
   1- Navigate to your local project directory and pull the latest code from the main branch:
      cd ~/ansible-config-mgt
+   
      git checkout master
+     
      git pull
+     
      git checkout -b refactor
 
   2- Create the static-assignments folder and relocate your common tasks:
+     
      mkdir -p static-assignments
+     
      mv playbooks/common.yml static-assignments/
   
   3- Create a cleanup playbook to safely handle package removal across hosts:
+     
      cat << 'EOF' > static-assignments/common-del.yml
      ---
      - name: remove wireshark from redhat hosts
@@ -69,6 +77,7 @@ Project 12: Ansible Refactoring & Static Assignments
   
   4- Create the main entry point playbook:
      
+     
      cat << 'EOF' > playbooks/site.yml
      ---
      - hosts: all
@@ -79,14 +88,19 @@ Project 12: Ansible Refactoring & Static Assignments
 
 3. Initialize & Build the Webserver Role
 
+
    1- Create the roles directory and initialize the webserver role structure:
 
-     mkdir -p roles
-     cd roles
-     ansible-galaxy init webserver
-     cd ..
+      mkdir -p roles
+
+      cd roles
+
+      ansible-galaxy init webserver
+
+      cd ..
 
    2- Update your inventory file to target your UAT nodes (172.31.8.200 and 172.31.0.22):
+
 
       cat << 'EOF' > inventory/uat.yml
       [uat-webservers]
@@ -99,6 +113,7 @@ Project 12: Ansible Refactoring & Static Assignments
      sudo sed -i 's|^#roles_path.*|roles_path = /home/ubuntu/ansible-config-mgt/roles|' /etc/ansible/ansible.cfg
 
    4- Define deployment tasks inside the webserver role:
+
 
        cat << 'EOF' > roles/webserver/tasks/main.yml
       ---
@@ -142,6 +157,7 @@ Project 12: Ansible Refactoring & Static Assignments
 
   
   5- Map the role to your static assignment mapping file:
+      
          cat << 'EOF' > static-assignments/uat-webservers.yml
          ---
          - hosts: uat-webservers
@@ -155,7 +171,9 @@ Project 12: Ansible Refactoring & Static Assignments
 
    1- Commit all additions and push your branch to GitHub:
          git add .
+
          git commit -m "feat: complete ansible refactoring, static assignments and webserver role"
+
          git push origin refactor
 
    2- Merge your Pull Request into master via GitHub. Confirm that Jenkins triggers and copies artifacts automatically.
@@ -163,17 +181,25 @@ Project 12: Ansible Refactoring & Static Assignments
 
    3- Load your SSH key into your SSH agent on your local machine / control node:
 
+
       eval $(ssh-agent -s)
+
       ssh-add /path/to/your-key.pem
 
 
    4- Execute the playbook execution against the UAT environment:
-       cd /home/ubuntu/ansible-config-mgt
-       ANSIBLE_ROLES_PATH=./roles ansible-playbook -i inventory/uat.yml playbooks/site.yml
+
+        cd /home/ubuntu/ansible-config-mgt
+
+        ANSIBLE_ROLES_PATH=./roles ansible-playbook -i inventory/uat.yml playbooks/site.yml
 
 
    5-  Verify deployment success by visiting the public IP addresses of UAT1 and UAT2 in your browser:
+ 
        http://<UAT1-PUBLIC-IP>/index.php
+
+       http://<UAT2-PUBLIC-IP>/index.php
+      
 
        http://<UAT2-PUBLIC-IP>/index.php
       
