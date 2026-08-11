@@ -102,11 +102,16 @@ Project 12: Ansible Refactoring & Static Assignments
    2- Update your inventory file to target your UAT nodes (172.31.8.200 and 172.31.0.22):
 
 
-      cat << 'EOF' > inventory/uat.yml
-      [uat-webservers]
-      172.31.8.200 ansible_ssh_user='ec2-user'
-      172.31.0.22 ansible_ssh_user='ec2-user'
-      EOF
+      cat << 'EOF' >
+       inventory/uat.yml
+
+       [uat-webservers]
+
+        172.31.8.200 ansible_ssh_user='ec2-user'
+
+        172.31.0.22 ansible_ssh_user='ec2-user'
+
+       EOF
 
    3- Update /etc/ansible/ansible.cfg to ensure Ansible locates your roles path:
 
