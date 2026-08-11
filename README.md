@@ -23,19 +23,22 @@ Project 12: Ansible Refactoring & Static Assignments
 
           -Artifacts to copy: **
 
-  7-Click Save.
+    7-Click Save.
 
 
 
 2- Refactor Repository & Create Playbook Imports
+
   1- Navigate to your local project directory and pull the latest code from the main branch:
      cd ~/ansible-config-mgt
      git checkout master
      git pull
      git checkout -b refactor
+
   2- Create the static-assignments folder and relocate your common tasks:
      mkdir -p static-assignments
      mv playbooks/common.yml static-assignments/
+  
   3- Create a cleanup playbook to safely handle package removal across hosts:
      cat << 'EOF' > static-assignments/common-del.yml
      ---
@@ -63,6 +66,7 @@ Project 12: Ansible Refactoring & Static Assignments
             ignore_errors: yes
     EOF
 
+  
   4- Create the main entry point playbook:
      
      cat << 'EOF' > playbooks/site.yml
@@ -72,13 +76,16 @@ Project 12: Ansible Refactoring & Static Assignments
      - import_playbook: ../static-assignments/uat-webservers.yml
      EOF
 
+
 3. Initialize & Build the Webserver Role
+
    1- Create the roles directory and initialize the webserver role structure:
 
      mkdir -p roles
      cd roles
      ansible-galaxy init webserver
      cd ..
+
    2- Update your inventory file to target your UAT nodes (172.31.8.200 and 172.31.0.22):
 
       cat << 'EOF' > inventory/uat.yml
@@ -86,9 +93,11 @@ Project 12: Ansible Refactoring & Static Assignments
       172.31.8.200 ansible_ssh_user='ec2-user'
       172.31.0.22 ansible_ssh_user='ec2-user'
       EOF
+
    3- Update /etc/ansible/ansible.cfg to ensure Ansible locates your roles path:
 
      sudo sed -i 's|^#roles_path.*|roles_path = /home/ubuntu/ansible-config-mgt/roles|' /etc/ansible/ansible.cfg
+
    4- Define deployment tasks inside the webserver role:
 
        cat << 'EOF' > roles/webserver/tasks/main.yml
@@ -131,6 +140,7 @@ Project 12: Ansible Refactoring & Static Assignments
        state: absent
       EOF
 
+  
   5- Map the role to your static assignment mapping file:
          cat << 'EOF' > static-assignments/uat-webservers.yml
          ---
@@ -139,22 +149,28 @@ Project 12: Ansible Refactoring & Static Assignments
          - webserver
          EOF
 
+
 4. Commit Changes, Execute Deployment & Workarounds
+
 
    1- Commit all additions and push your branch to GitHub:
          git add .
          git commit -m "feat: complete ansible refactoring, static assignments and webserver role"
          git push origin refactor
+
    2- Merge your Pull Request into master via GitHub. Confirm that Jenkins triggers and copies artifacts automatically.
+
 
    3- Load your SSH key into your SSH agent on your local machine / control node:
 
       eval $(ssh-agent -s)
       ssh-add /path/to/your-key.pem
 
+
    4- Execute the playbook execution against the UAT environment:
        cd /home/ubuntu/ansible-config-mgt
        ANSIBLE_ROLES_PATH=./roles ansible-playbook -i inventory/uat.yml playbooks/site.yml
+
 
    5-  Verify deployment success by visiting the public IP addresses of UAT1 and UAT2 in your browser:
        http://<UAT1-PUBLIC-IP>/index.php
