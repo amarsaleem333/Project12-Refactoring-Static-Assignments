@@ -204,11 +204,4 @@ Project 12: Ansible Refactoring & Static Assignments
        http://<UAT1-PUBLIC-IP>/index.php
 
        http://<UAT2-PUBLIC-IP>/index.php
-      
-
-   
-      
-
-     
-   
      
