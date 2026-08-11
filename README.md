@@ -6,7 +6,9 @@ Project 12: Ansible Refactoring & Static Assignments
    1-Log into your Jenkins-Ansible control server terminal and create the artifacts directory:
       sudo mkdir -p /home/ubuntu/ansible-config-artifact
       sudo chmod -R 0777 /home/ubuntu/ansible-config-artifact
+   
    2- Open the Jenkins Web Console, navigate to Manage Jenkins $\rightarrow$ Plugins, search for Copy Artifact, and install it without restarting Jenkins.
+
    3- Create a new Freestyle Project named save_artifacts.
 
    4- Under General, select Discard old builds and set Max # of builds to keep to 2.
