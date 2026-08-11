@@ -1,5 +1,6 @@
 Project 12: Ansible Refactoring & Static Assignments
 
+
 1. Configure Jenkins Save Artifacts Job
 
    1-Log into your Jenkins-Ansible control server terminal and create the artifacts directory:
